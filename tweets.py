@@ -3,11 +3,11 @@ import base64
 import datetime
 
 
-def getTweeets():
+
+def getTweeets(p=None):
     consumer_key = 'XXZIKkMETHW6tAdGXs0jXo3SB'
     consumer_secret = 'G9OJGz2MceHf8ZLkXDCyV0U4hQEcMVKiXHxyTReli6Fjxn9KQF'
-    resource_owner_key = '1214904876427288576-8XoWHXKYQvCRJvmRfL4Hz9ENNzcfjw'
-    resource_owner_secret = 'imbtd4xK0sTYUqpH270zzBzc3d9QF2sXgRuR7BGPan7ZX'
+
 
     client_key = consumer_key
     client_secret = consumer_secret
@@ -36,22 +36,29 @@ def getTweeets():
     search_headers = {
         'Authorization': 'Bearer {}'.format(access_token)
     }
-    pages_list = ['Python Weekly', 'Real Python', 'Full Stack Python']
+    if p == None:
+        pages_list = ['Python Weekly', 'Real Python', 'Full Stack Python']
+    else:
+        pages_list = [p]
 
     # real time to check the tweet
     time = datetime.datetime.now()
     real_minute = time.minute
     real_hour = time.hour
 
-    # format the time for the fromdate parmetr
+    # format the time for the fromdate parameter
     list_str_date = str(time.date()).split("-")
     str_date = ""
     for string in list_str_date:
         str_date += string
-    str_date += str(real_hour - 1)
+    if real_hour == 00:
+        str_date += str(23)
+    else:
+        str_date += str(real_hour - 1)
     str_date += str(real_minute)
 
-    tweets_to_send = []
+    tweets_to_send = set()
+
     for page in pages_list:
         search_params = {
             'q': page,
@@ -59,14 +66,16 @@ def getTweeets():
             "maxResults": 500,
             'lang': 'en'
         }
+        # statuses/user_timeline.json
         search_url = '{}1.1/search/tweets.json'.format(base_url)
         search_resp = requests.get(search_url, headers=search_headers, params=search_params)
         tweet_data = search_resp.json()
 
         for tweet in tweet_data['statuses']:
-            if tweet['id'] not in tweets_to_send:
-                # tweet_data['statuses'] FOR EACH -> created date
-                if int(tweet['created_at'].split(' ')[3].split(':')[0]) > real_hour - 1:
-                    tweets_to_send.append((tweet['created_at'], tweet['text']))
+            if int(tweet['created_at'].split(' ')[3].split(':')[0]) > real_hour - 1:
+                tweets_to_send.add(tweet['text'])
 
     return tweets_to_send
+
+
+
