@@ -6,7 +6,7 @@ from tweets import getTweeets
 
 def f(f_stop):
     if not f_stop.is_set():
-        client = slack.WebClient(token='xoxb-962732149956-951750678595-5RPg2DDV5bz9zQmglj5Qlhm0')
+        client = slack.WebClient(token='api_token')
         localtime = time.asctime(time.localtime(time.time()))
         response = client.chat_postMessage(
             channel='#content',
@@ -16,7 +16,7 @@ def f(f_stop):
 
 def g(g_stop):
     if not g_stop.is_set():
-        client = slack.WebClient(token='xoxb-962732149956-951750678595-5RPg2DDV5bz9zQmglj5Qlhm0')
+        client = slack.WebClient(token='api_token')
         tweets = getTweeets(p='omri')
         if tweets:
             response = client.chat_postMessage(
@@ -63,6 +63,6 @@ def say_hello(**payload):
                     text='\n'.join(map(str, tweets))
                 )
 
-slack_token = 'xoxb-962732149956-951750678595-5RPg2DDV5bz9zQmglj5Qlhm0'
+slack_token = 'api_token'
 rtm_client = slack.RTMClient(token=slack_token)
 rtm_client.start()
