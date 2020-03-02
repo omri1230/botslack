@@ -5,8 +5,8 @@ import datetime
 
 
 def getTweeets(p=None):
-    consumer_key = 'XXZIKkMETHW6tAdGXs0jXo3SB'
-    consumer_secret = 'G9OJGz2MceHf8ZLkXDCyV0U4hQEcMVKiXHxyTReli6Fjxn9KQF'
+    consumer_key = ''
+    consumer_secret = ''
 
 
     client_key = consumer_key
